@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>逆子迴游｜官方網站</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500&family=Noto+Serif+TC:wght@500;900&display=swap" rel="stylesheet">
+
+<style>
+/* ========== 1. 顏色與字體（想換風格先改這裡） ========== */
+:root {
+  --bg: #1f0a12;          /* 漆紅黑：整站底色 */
+  --bg-card: #2e1019;     /* 卡片底色 */
+  --line: #5a2a38;        /* 邊線 */
+  --gold: #dcbb7e;        /* 香檳金：標題、重點 */
+  --rose: #d4577a;        /* 玫瑰紅：按鈕、選中狀態 */
+  --text: #f4e8d8;        /* 主要文字 */
+  --text-dim: #b99ea3;    /* 次要文字 */
+  --serif: "Noto Serif TC", "Microsoft JhengHei", serif;
+  --sans: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+}
+
+/* ========== 2. 基本設定 ========== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  line-height: 1.8;
+}
+h1, h2, h3 { font-family: var(--serif); font-weight: 900; color: var(--gold); }
+button { font-family: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+/* ========== 3. 導覽列 ========== */
+.site-header {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 8px 24px;
+  padding: 14px 5vw;
+  background: rgba(31, 10, 18, .95);
+  border-bottom: 1px solid var(--line);
+}
+.logo { font-family: var(--serif); font-weight: 900; font-size: 1.4rem; color: var(--gold); letter-spacing: .25em; }
+.nav { display: flex; gap: 4px; flex-wrap: wrap; }
+.nav button {
+  background: none; border: none; color: var(--text-dim);
+  padding: 6px 14px; font-size: 1rem;
+  border-bottom: 2px solid transparent;
+}
+.nav button:hover { color: var(--text); }
+.nav button.active { color: var(--gold); border-bottom-color: var(--rose); }
+
+/* ========== 4. 頁面共用 ========== */
+.page { display: none; padding: 48px 5vw 72px; max-width: 1100px; margin: 0 auto; }
+.page.active { display: block; }
+.page-title { font-size: 2rem; margin-bottom: 8px; }
+.page-sub { color: var(--text-dim); margin-bottom: 36px; }
+
+/* 圖片框：沒放圖片時顯示文字，放了圖片就蓋住文字 */
+.img-box {
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg-card);
+  border: 1px dashed var(--line);
+  color: var(--text-dim); font-size: .9rem; text-align: center;
+}
+.img-box img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+/* ========== 5. 關於逆子（首頁） ========== */
+.hero { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+.hero .img-box { aspect-ratio: 1289 / 1079; border-style: solid; }
+.hero-text { display: flex; gap: 32px; align-items: flex-start; }
+.brand-vertical {
+  writing-mode: vertical-rl;
+  font-size: clamp(3.2rem, 9vw, 6.5rem);
+  letter-spacing: .3em; line-height: 1.1;
+  color: var(--gold);
+  border-right: 3px solid var(--rose);
+  padding-right: 20px;
+}
+.hero-body h2 { font-size: 1.4rem; margin-bottom: 12px; }
+.hero-body p { color: var(--text); margin-bottom: 12px; }
+.blank { color: var(--text-dim); font-style: italic; }
+
+/* ========== 6. 各牛郎介紹 ========== */
+.host-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; }
+.host-card { background: var(--bg-card); border: 1px solid var(--line); }
+.host-card .img-box { aspect-ratio: 3 / 4; border: none; border-bottom: 1px solid var(--line); }
+.host-info { padding: 14px 16px 18px; }
+.host-info h3 { font-size: 1.15rem; }
+.host-info p { color: var(--text-dim); font-size: .92rem; }
+
+/* ========== 7. 選擇測驗 ========== */
+.quiz-box { max-width: 680px; background: var(--bg-card); border: 1px solid var(--line); padding: 32px; }
+.quiz-box h2 { margin-bottom: 12px; }
+.quiz-count { color: var(--text-dim); font-size: .9rem; margin-bottom: 8px; }
+.quiz-text { font-size: 1.15rem; margin-bottom: 24px; }
+.option {
+  display: block; width: 100%; text-align: left;
+  background: transparent; color: var(--text);
+  border: 1px solid var(--line);
+  padding: 14px 18px; margin-bottom: 12px; font-size: 1rem;
+}
+.option:hover { border-color: var(--rose); background: rgba(212, 87, 122, .12); }
+.btn {
+  background: var(--rose); color: #fff; border: none;
+  padding: 12px 28px; font-size: 1rem;
+}
+.btn:hover { filter: brightness(1.1); }
+.btn-ghost { background: none; color: var(--text-dim); border: 1px solid var(--line); margin-left: 8px; }
+.result-card { display: grid; grid-template-columns: 200px 1fr; gap: 24px; margin: 20px 0 28px; }
+.result-card .img-box { aspect-ratio: 3 / 4; }
+.hidden { display: none; }
+
+/* ========== 8. 活動事蹟 ========== */
+.event-list { display: grid; gap: 24px; }
+.event { display: grid; grid-template-columns: 280px 1fr; gap: 24px; background: var(--bg-card); border: 1px solid var(--line); }
+.event .img-box { aspect-ratio: 4 / 3; border: none; border-right: 1px solid var(--line); }
+.event-info { padding: 20px 24px 20px 0; }
+.event-date { color: var(--rose); font-size: .9rem; }
+.event-info h3 { font-size: 1.2rem; margin: 4px 0 8px; }
+
+.site-footer { text-align: center; padding: 28px 5vw; color: var(--text-dim); font-size: .85rem; border-top: 1px solid var(--line); }
+
+/* ========== 9. 手機版 ========== */
+@media (max-width: 760px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-text { flex-direction: row; }
+  .result-card { grid-template-columns: 1fr; }
+  .event { grid-template-columns: 1fr; }
+  .event .img-box { border-right: none; border-bottom: 1px solid var(--line); }
+  .event-info { padding: 0 20px 20px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ========== 導覽列 ========== -->
+<header class="site-header">
+  <div class="logo">逆子迴游</div>
+  <nav class="nav">
+    <button data-page="about" class="active">關於逆子</button>
+    <button data-page="hosts">牛郎介紹</button>
+    <button data-page="quiz">選擇測驗</button>
+    <button data-page="events">活動事蹟</button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ========== 頁面 1：關於逆子牛郎店 ========== -->
+  <section id="about" class="page active">
+    <div class="hero">
+      <!-- 宣傳圖：把朋友做的圖存成 images/banner.jpg 就會自動出現 -->
+      <div class="img-box">
+        <span>宣傳圖放這裡</span>
+        <img src="images/banner.jpg" alt="逆子迴游宣傳圖" onerror="this.remove()">
+      </div>
+
+      <div class="hero-text">
+        <h1 class="brand-vertical">逆子迴游</h1>
+        <div class="hero-body">
+          <h2>關於逆子牛郎店</h2>
+          <p class="blank">（店家簡介文字放這裡）</p>
+          <p class="blank">（營業時間、地點、理念等可以再加）</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 頁面 2：各牛郎介紹（內容由下方 JS 的 hosts 陣列產生） ========== -->
+  <section id="hosts" class="page">
+    <h2 class="page-title">各牛郎介紹</h2>
+    <p class="page-sub blank">（這裡可以放一句總介紹）</p>
+    <div id="hostGrid" class="host-grid"></div>
+  </section>
+
+  <!-- ========== 頁面 3：選擇測驗 ========== -->
+  <section id="quiz" class="page">
+    <h2 class="page-title">選擇測驗</h2>
+    <p class="page-sub">回答幾個問題，看看今晚誰會為你服務。</p>
+
+    <!-- 開始畫面 -->
+    <div id="quizStart" class="quiz-box">
+      <p class="quiz-text blank">（這裡是透過各種事件幫助你選出你心中的那個他，看看你最後會選出哪位真命天子吧！）</p>
+      <button class="btn" id="startBtn">開始測驗</button>
+    </div>
+
+    <!-- 題目畫面 -->
+    <div id="quizQuestion" class="quiz-box hidden">
+      <div class="quiz-count" id="quizCount"></div>
+      <p class="quiz-text" id="quizText"></p>
+      <div id="quizOptions"></div>
+      <button class="btn btn-ghost" id="backBtn" style="margin-left:0">上一題</button>
+    </div>
+
+    <!-- 結果畫面 -->
+    <div id="quizResult" class="quiz-box hidden">
+      <h2>你的測驗結果</h2>
+      <div class="result-card" id="resultCard"></div>
+      <button class="btn" id="retryBtn">重新測驗</button>
+    </div>
+  </section>
+
+  <!-- ========== 頁面 4：活動事蹟 ========== -->
+  <section id="events" class="page">
+    <h2 class="page-title">活動事蹟</h2>
+    <p class="page-sub blank">（這裡可以放一句總介紹）</p>
+    <div id="eventList" class="event-list"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  逆子迴游　本站為遊戲角色攝影興趣創作，內容純屬虛構。
+  作者：上班時間打混的硫磺
+</footer>
+
+
+<script>
+/* ==========================================================
+   資料區：之後要改內容，主要改這裡
+   ========================================================== */
+
+/* ---------- 牛郎資料（共 11 位，id 對應測驗結果的「答案N」） ----------
+   name：名字　img：照片路徑　intro：介紹文字
+   照片請放在 images 資料夾，檔名依序 host1.jpg、host2.jpg ... */
+const hosts = [
+  { id: 7,  name: "牛郎 1",  img: "images/host7.jpeg",  intro: "（介紹文字）" },
+  { id: 2,  name: "牛郎 2",  img: "images/host2.jpeg",  intro: "（介紹文字）" },
+  { id: 3,  name: "牛郎 3",  img: "images/host3.jpeg",  intro: "（介紹文字）" },
+  { id: 6,  name: "牛郎 4",  img: "images/host6.jpeg",  intro: "（介紹文字）" },
+  { id: 1,  name: "牛郎 5",  img: "images/host1.jpeg",  intro: "（介紹文字）" },
+  { id: 8,  name: "牛郎 6",  img: "images/host8.jpeg",  intro: "（介紹文字）" },
+  { id: 9,  name: "牛郎 7",  img: "images/host9.jpeg",  intro: "（介紹文字）" },
+  { id: 10, name: "牛郎 8", img: "images/host10.jpeg", intro: "（介紹文字）" },
+  { id: 11, name: "牛郎 9", img: "images/host11.jpeg", intro: "（介紹文字）" },
+  { id: 4, name: "魚仔店長", img: "images/host12.jpg", intro: " (介紹文字)" },
+  { id: 5, name: "阿瓜經理", img: "images/host12.jpg", intro: "(介紹文字)" }
+];
+
+/* ---------- 活動事蹟資料 ---------- */
+const events = [
+  { date: "（日期）", title: "（活動名稱）", img: "images/event1.jpg", desc: "（活動介紹）" },
+  { date: "（日期）", title: "（活動名稱）", img: "images/event2.jpg", desc: "（活動介紹）" },
+  { date: "（日期）", title: "（活動名稱）", img: "images/event3.jpg", desc: "（活動介紹）" }
+];
+
+/* ---------- 測驗題目 ----------
+   每個選項只會有兩種其中一種：
+   next: 題號   → 跳到那一題
+   result: 編號 → 顯示該編號牛郎為結果（對應 hosts 的 id） */
+const questions = {
+  1: { text: "鄰近考試但無聊想找書看，你會選擇：",
+       options: [ { text: "繼續讀書", next: 2 },
+                  { text: "玩手機",   next: 3 } ] },
+
+  2: { text: "考完試的你想找個娛樂放鬆一下，你會選擇：",
+       options: [ { text: "在家耍廢", next: 4 },
+                  { text: "接觸戶外", next: 3 } ] },
+
+  3: { text: "此時你發現附近有家新店，你會：",
+       options: [ { text: "去",   next: 5 },
+                  { text: "不去", next: 4 } ] },
+
+  4: { text: "朋友失戀打電話來約你去聊天，你會選擇：",
+       options: [ { text: "我們去看個電影放鬆", next: 6 },
+                  { text: "來，我們去喝酒",     next: 5 } ] },
+
+  5: { text: "店裡一眾排開，此時卻有個人跌倒了，店長急沖沖走過來：",
+       options: [ { text: "趕緊扶他起來",   result: 1 },
+                  { text: "向店長解釋情況", next: 7 } ] },
+
+  6: { text: "觸景生情，朋友哭了出來，服務生很有禮貌地給了朋友手帕，朋友卻哭得講不清楚話了：",
+       options: [ { text: "替他道謝", result: 8 },
+                  { text: "回絕",     next: 8 } ] },
+
+  7: { text: "店長很賞識你這個人，於是幫你開了一瓶酒：",
+       options: [ { text: "先幫他倒一杯一起喝", result: 4 },
+                  { text: "三五杯下肚",         next: 9 } ] },
+
+  8: { text: "結果朋友哭到連電影都沒法看，退了票，但另一位服務生卻走過來要你繼續看：",
+       options: [ { text: "留下來看", result: 11 },
+                  { text: "拒絕",     next: 10 } ] },
+
+  9: { text: "沒想到喝太快，一陣暈眩後，你在眾人之中最先注意到的是：",
+       options: [ { text: "靜靜幫你擋酒的人", result: 2 },
+                  { text: "眼前的酒杯",       next: 11 } ] },
+
+  10: { text: "既沒看到電影也沒安慰到朋友，你決定：",
+        options: [ { text: "帶他去好玩的遊樂園坐過山車",   result: 7 },
+                   { text: "吃能解決一切，吃個卡尼吧",     result: 6 } ] },
+
+  11: { text: "你決定拿起來乾了他，但此時有隻手攔截了酒杯，你決定：",
+        options: [ { text: "用手攔截的人", result: 10 },
+                   { text: "繼續喝",       next: 12 } ] },
+
+  12: { text: "你繼續喝下一杯的同時，卻傳來了幾個人的聲音，你覺得他們說了什麼：",
+        options: [ { text: "再喝下去就不好了，我們就聊聊天別喝酒，好嗎？", result: 3 },
+                   { text: "姊姊，看看我，不要喝了",                       result: 9 },
+                   { text: "呀…我可不能幫你喝，我也會醉的呀",             result: 5 } ] }
+};
+
+
+/* ==========================================================
+   功能區
+   ========================================================== */
+
+/* ---------- 工具：產生「圖片框」 ---------- */
+function imgBox(src, label) {
+  return `<div class="img-box">
+            <span>${label}</span>
+            <img src="${src}" alt="${label}" onerror="this.remove()">
+          </div>`;
+}
+
+/* ---------- 切換頁面 ---------- */
+const navButtons = document.querySelectorAll(".nav button");
+const pages = document.querySelectorAll(".page");
+
+function showPage(id) {
+  pages.forEach(p => p.classList.toggle("active", p.id === id));
+  navButtons.forEach(b => b.classList.toggle("active", b.dataset.page === id));
+  window.scrollTo(0, 0);
+}
+navButtons.forEach(b => b.addEventListener("click", () => showPage(b.dataset.page)));
+
+/* ---------- 產生牛郎介紹卡片 ---------- */
+function renderHosts() {
+  const grid = document.getElementById("hostGrid");
+  grid.innerHTML = hosts.map(h => `
+    <article class="host-card">
+      ${imgBox(h.img, "照片")}
+      <div class="host-info">
+        <h3>${h.name}</h3>
+        <p>${h.intro}</p>
+      </div>
+    </article>
+  `).join("");
+}
+
+/* ---------- 產生活動列表 ---------- */
+function renderEvents() {
+  const list = document.getElementById("eventList");
+  list.innerHTML = events.map(e => `
+    <article class="event">
+      ${imgBox(e.img, "活動照片")}
+      <div class="event-info">
+        <div class="event-date">${e.date}</div>
+        <h3>${e.title}</h3>
+        <p>${e.desc}</p>
+      </div>
+    </article>
+  `).join("");
+}
+
+/* ---------- 測驗邏輯 ---------- */
+const quizStart    = document.getElementById("quizStart");
+const quizQuestion = document.getElementById("quizQuestion");
+const quizResult   = document.getElementById("quizResult");
+
+let currentQ = 1;     // 目前題號
+let history  = [];    // 走過的題號，給「上一題」用
+
+// 只顯示其中一個畫面
+function showQuizView(view) {
+  [quizStart, quizQuestion, quizResult].forEach(v => v.classList.add("hidden"));
+  view.classList.remove("hidden");
+}
+
+// 顯示第 n 題
+function showQuestion(n) {
+  currentQ = n;
+  const q = questions[n];
+  document.getElementById("quizCount").textContent = "第 " + n + " 題";
+  document.getElementById("quizText").textContent = n + ". " + q.text;
+
+  const box = document.getElementById("quizOptions");
+  box.innerHTML = "";
+  const letters = ["A", "B", "C", "D"];
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.className = "option";
+    btn.textContent = letters[i] + "　" + opt.text;
+    btn.addEventListener("click", () => choose(opt));
+    box.appendChild(btn);
+  });
+
+  document.getElementById("backBtn").classList.toggle("hidden", history.length === 0);
+  showQuizView(quizQuestion);
+}
+
+// 按下選項：有 result 就出結果，否則跳到下一題
+function choose(opt) {
+  if (opt.result) {
+    showResult(opt.result);
+  } else {
+    history.push(currentQ);
+    showQuestion(opt.next);
+  }
+}
+
+// 顯示結果
+function showResult(id) {
+  const h = hosts.find(x => x.id === id);
+  document.getElementById("resultCard").innerHTML = `
+    ${imgBox(h.img, "照片")}
+    <div>
+      <h3>${h.name}</h3>
+      <p>${h.intro}</p>
+    </div>
+  `;
+  showQuizView(quizResult);
+}
+
+// 重新開始
+function restartQuiz() {
+  history = [];
+  currentQ = 1;
+  showQuizView(quizStart);
+}
+
+document.getElementById("startBtn").addEventListener("click", () => showQuestion(1));
+document.getElementById("retryBtn").addEventListener("click", restartQuiz);
+document.getElementById("backBtn").addEventListener("click", () => {
+  if (history.length > 0) showQuestion(history.pop());
+});
+
+/* ---------- 網頁載入後執行 ---------- */
+renderHosts();
+renderEvents();
+</script>
+
+</body>
+</html>
