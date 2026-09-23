@@ -194,7 +194,7 @@ button { font-family: inherit; cursor: pointer; }
     <!-- 題目畫面 -->
     <div id="quizQuestion" class="quiz-box hidden">
       <div class="quiz-count" id="quizCount"></div>
-      
+      <p class="quiz-text" id="quizText"></p>
       <div id="quizOptions"></div>
       <button class="btn btn-ghost" id="backBtn" style="margin-left:0">上一題</button>
     </div>
@@ -379,7 +379,7 @@ function showQuestion(n) {
   currentQ = n;
   const q = questions[n];
   document.getElementById("quizCount").textContent = "第 " + (history.length + 1) + " 題";
-  document.getElementById("quizText").textContent = n + ". " + q.text;
+  document.getElementById("quizText").textContent =q.text;
 
   const box = document.getElementById("quizOptions");
   box.innerHTML = "";
