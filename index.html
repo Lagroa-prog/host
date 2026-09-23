@@ -316,7 +316,7 @@ function imgBox(src, label, fit) {
 	const cls = fit === "contain" ? "contain" : "";
   return `<div class="img-box">
             <span>${label}</span>
-            <img src="${src}" alt="${label}" onerror="this.remove()">
+            <img class="${cls}" src="${src}" onerror="this.remove()">
           </div>`;
 }
 
