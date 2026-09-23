@@ -68,6 +68,7 @@ button { font-family: inherit; cursor: pointer; }
   color: var(--text-dim); font-size: .9rem; text-align: center;
 }
 .img-box img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.img-box img.contain { object-fit:contain; background:var(--bg-card);}
 
 /* ========== 5. 關於逆子（首頁） ========== */
 .hero { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
@@ -236,11 +237,11 @@ const hosts = [
   { id: 6,  name: "༺ༀ༂阿༒駝࿅༂ༀ༻",  img: "images/host6.jpeg",  intro: "對容易3D暈的顧客我們有準備嘔吐袋，請放心飲食" },
   { id: 1,  name: "༺ༀ༂雷༒電࿅༂ༀ༻",  img: "images/host1.jpeg",  intro: "能徒手榨果汁與碎石的林黛玉轉世，喜歡肢體接觸" },
   { id: 8,  name: "༺ༀ༂白巧༒師匠࿅༂ༀ༻",  img: "images/host8.jpeg",  intro: "為了各位的寵物家人著想，請遠離人形寵物毒藥" },
-  { id: 9,  name: "༺ༀ༂黑༒霧࿅༂ༀ༻",  img: "images/host9.jpeg",  intro: "一身是嘴的人才，讓顧客說不出話是專長" },
+  { id: 9,  name: "༺ༀ༂黑༒霧࿅༂ༀ༻",  img: "images/host9.jpeg",  intro: "一身是嘴的人才，讓顧客說不出話是專長" ,fit: "contain"},
   { id: 10, name: "༺ༀ༂白༒古拉匠࿅༂ༀ༻", img: "images/host10.jpeg", intro: "本店唯一不需支付金錢的顧客，會給你精神上無比的快樂～" },
-  { id: 11, name: "༺ༀ༂霸總༒梵ㄩ࿅༂ༀ༻", img: "images/host11.jpeg", intro: "'女人，給妳這個機會指名我，不要不知好歹'" },
-  { id: 4, name: "魚仔店長", img: "images/host12.jpg", intro: "本店榮光店長！容易心軟借錢，導致倒店的罪魁禍首之一" },
-  { id: 5, name: "阿瓜經理", img: "images/host12.jpg", intro: "本店出名的光聞就醉經理！因為醉倒而常態加班" }
+  { id: 11, name: "༺ༀ༂霸總༒梵ㄩ࿅༂ༀ༻", img: "images/host11.jpeg", intro: "'女人，給妳這個機會指名我，不要不知好歹'" ,fit: "contain" },
+  { id: 4, name: "魚仔店長", img: "images/host12.jpg", intro: "本店榮光店長！容易心軟借錢，導致倒店的罪魁禍首之一" ,fit: "contain"},
+  { id: 5, name: "阿瓜經理", img: "images/host12.jpg", intro: "本店出名的光聞就醉經理！因為醉倒而常態加班" ,fit: "contain"}
 ];
 
 /* ---------- 活動事蹟資料 ---------- */
@@ -311,7 +312,8 @@ const questions = {
    ========================================================== */
 
 /* ---------- 工具：產生「圖片框」 ---------- */
-function imgBox(src, label) {
+function imgBox(src, label, fit) {
+	const cls = fit === "contain" ? "contain" : "";
   return `<div class="img-box">
             <span>${label}</span>
             <img src="${src}" alt="${label}" onerror="this.remove()">
@@ -334,7 +336,7 @@ function renderHosts() {
   const grid = document.getElementById("hostGrid");
   grid.innerHTML = hosts.map(h => `
     <article class="host-card">
-      ${imgBox(h.img, "照片")}
+      ${imgBox(h.img, "照片", h.fit)}
       <div class="host-info">
         <h3>${h.name}</h3>
         <p>${h.intro}</p>
@@ -376,7 +378,7 @@ function showQuizView(view) {
 function showQuestion(n) {
   currentQ = n;
   const q = questions[n];
-  document.getElementById("quizCount").textContent = "第 " + n + " 題";
+  document.getElementById("quizCount").textContent = "第 " + (history.length + 1) + " 題";
   document.getElementById("quizText").textContent = n + ". " + q.text;
 
   const box = document.getElementById("quizOptions");
